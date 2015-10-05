@@ -1,0 +1,57 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="search-button">
+    <style is="custom-style">
+        paper-input.search {
+            display: inline-block;
+            --paper-input-container-input: {
+                 color: var(--paper-grey-50);
+                 transition: width 1s;
+             };
+            --paper-input-container-underline-focus: {
+                 background: var(--paper-grey-50);
+             };
+        }
+        #search {
+            width: 0;
+        }
+    </style>
+    <template>
+        <paper-icon-button icon="search" on-tap="_handleTap"></paper-icon-button>
+        <paper-input no-label-float autocomplete="false" class="search" id="search"></paper-input>
+    </template>
+
+    <script>
+        Polymer({
+            is: "search-button",
+            listeners: {
+                'search.blur': '_handleBlur',
+                'search.keydown': '_handleKeyDown'
+            },
+            _handleTap: function() {
+                console.log(this.$.search.style.width);
+                if (this.$.search.style.width != '200px') {
+                    this.$.search.style.width = '200px';
+                    this.$.search.$.input.focus();
+                } else {
+                    this._search();
+                }
+            },
+            _handleBlur: function() {
+                this.$.search.style.width = '0';
+            },
+            _handleKeyDown: function(e) {
+                if (e.keyCode == 13) {
+                    this._search();
+                }
+            },
+            _search: function() {
+                alert('search...');
+            }
+        });
+    </script>
+
+</dom-module>

@@ -1,0 +1,130 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="include.html">
+
+<dom-module id="home-view">
+    <style is="custom-style">
+        [drawer] {
+            @apply(--shadow-elevation-4dp);
+            background-color: var(--paper-grey-300);
+        }
+
+        .paper-header {
+            -webkit-transition: height 0.2s, background-color 0.6s;
+            transition: height 0.2s, background-color 0.2s;
+        }
+        .paper-header.tall {
+            height: 360px;
+            background-color: rgba(0, 0, 0, .5);
+        }
+        .paper-header:not(.tall) {
+            background-color: var(--paper-cyan-600);
+            color: var(--primary-text-color);
+        }
+        .paper-header paper-toolbar {
+            --paper-toolbar-background: {
+                 background-color: inherit;
+             };
+        }
+
+        .paper-header .hello-banner {
+            text-align: center;
+            margin-top: -50px;
+        }
+        .paper-header .hello-banner p.hello {
+            @apply(--paper-font-display3);
+            color: var(--paper-grey-50);
+            font-weight: 900 !important;
+            font-size: 65px !important;
+            text-transform: uppercase;
+        }
+        .paper-header .hello-banner p.hello .highlight {
+            color: var(--paper-cyan-300);
+        }
+
+        .paper-header .hello-banner p.about {
+            @apply(--paper-font-headline);
+            color: var(--paper-grey-50);
+            font-weight: 200 !important;
+            text-transform: uppercase;
+            margin-top: -45px;
+        }
+
+        .paper-header .hello-banner paper-button {
+            background: var(--paper-cyan-600);
+            color: var(--paper-grey-50);
+            width: 130px;
+        }
+
+        paper-dialog {
+            width: 95%;
+            height: 90%;
+        }
+
+        .content {
+            height: 2000px;
+            background-color: var(--paper-grey-50);
+        }
+    </style>
+    <template>
+        <paper-drawer-panel force-narrow>
+            <div drawer></div>
+            <div main>
+                <paper-header-panel mode="waterfall-tall" on-content-scroll="_handleContentScroll">
+                    <div class="paper-header">
+                        <paper-toolbar>
+                            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+                            <div class="title">Home <span>{{pagePosition}}</span></div>
+                            <search-button></search-button>
+                        </paper-toolbar>
+                        <div class="hello-banner" id="helloPanel">
+                            <p class="hello">Hi! I'm <span class="highlight">phuc nguyen</span></p>
+                            <p class="about">Web developer from Innoria Solution</p>
+                            <paper-button id="btnFindMe" raised>
+                                <iron-icon icon="maps:place"></iron-icon> Find me
+                            </paper-button>
+                        </div>
+                    </div>
+                    <div class="content fit">
+                        <content></content>
+                    </div>
+                </paper-header-panel>
+            </div>
+        </paper-drawer-panel>
+        <paper-dialog id="findMe" class="vertical layout" entry-animation="scale-up-animation" exit-animation="fade-out-animation" with-backdrop modal>
+            <h2>Find me in google map</h2>
+            <google-map class="flex" latitude="37.77493" longitude="-122.41942" zoom="16" fit-to-markers>
+                <google-map-marker latitude="10.7346302" longitude="106.6918806" title="Phucnguyen - Innoria Solution!"></google-map-marker>
+            </google-map>
+            <div class="buttons">
+                <paper-button dialog-confirm>Close</paper-button>
+            </div>
+        </paper-dialog>
+    </template>
+
+    <script>
+        Polymer({
+            is: "home-view",
+            properties: {
+                displayHello: true,
+                pagePosition: ''
+            },
+            listeners: {
+                'btnFindMe.tap': '_handleFindMe'
+            },
+            _handleContentScroll: function(e) {
+                var scroller = event.detail.target;
+                if (scroller.scrollTop > 0) {
+                    this.$.helloPanel.style.display = 'none';
+                    this.pagePosition = '> About me';
+                } else {
+                    this.$.helloPanel.style.display = 'block';
+                    this.pagePosition = '';
+                }
+            },
+            _handleFindMe: function(e) {
+                this.$.findMe.open();
+            }
+        });
+    </script>
+
+</dom-module>

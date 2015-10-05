@@ -1,0 +1,86 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="../bower_components/paper-drawer-panel/paper-drawer-panel.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+<dom-module id="main-container">
+    <style is="custom-style">
+        :host {
+			@apply(--layout-fit);
+			--narrow-bg-color: initial;
+			background-color: gray;
+			background-image: url("../img/bg.jpg");
+			background-size: cover;
+			background-repeat: no-repeat;
+		}
+		paper-drawer-panel {
+			--paper-drawer-panel-left-drawer-container: {
+				background-color: var(--narrow-bg-color);
+			};
+		}
+		div[main] {
+			@apply(--layout-vertical);
+		}
+		.main-content {
+			@apply(--layout-flex);
+			background-color: #ffffff;
+		}
+		.top-placeholder {
+			width: 100%;
+			height: 30px;
+		}
+		
+		.navbar {
+			@apply(--layout-horizontal);
+			@apply(--layout-justified);
+			width: 100%;
+			height: 56px;
+			background-color: #dddddd;
+		}
+		search-button {
+			@apply(--layout-self-center);
+		}
+    </style>
+    <template>
+        <paper-drawer-panel narrow="{{narrow}}">
+			<div drawer></div>
+			<div main>
+				<div class="top-placeholder" hidden="{{narrow}}"></div>
+				<div class="main-content">
+					<div class="navbar">
+						<paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button> Main panel...
+					</div>
+				</div>
+			</div>
+		</paper-drawer-panel>
+    </template>
+    <script>
+        Polymer({
+            is: "main-container",
+			properties: {
+				hideDesktop: true
+			},
+			listeners: {
+				'paper-responsive-change': '_onChangeResponsive'
+			},
+			ready: function() {
+				var self = this;
+				setTimeout(function() {
+					self._setNarrowBgColor();
+				}, 100);
+			},
+			_onChangeResponsive: function() {
+				this._setNarrowBgColor();
+			},
+			_setNarrowBgColor: function() {
+				if (this.narrow) {
+					this.customStyle['--narrow-bg-color'] = '#ffffff';
+				} else {
+					this.customStyle['--narrow-bg-color'] = 'initial';
+				}
+				this.updateStyles();
+			}
+        });
+    </script>
+</dom-module>
